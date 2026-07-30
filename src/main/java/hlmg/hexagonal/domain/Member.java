@@ -8,7 +8,7 @@ import static org.springframework.util.Assert.state;
 
 @Getter
 @ToString
-public class Member {
+public final class Member {
 
     private String email;
 
