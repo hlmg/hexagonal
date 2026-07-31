@@ -26,8 +26,8 @@ public final class Member {
         this.status = MemberStatus.PENDING;
     }
 
-    public static Member create(String email, String nickname, String password, PasswordEncoder passwordEncoder) {
-        return new Member(email, nickname, passwordEncoder.encode(password));
+    public static Member create(MemberCreateRequest createRequest, PasswordEncoder passwordEncoder) {
+        return new Member(createRequest.email(), createRequest.nickname(), passwordEncoder.encode(createRequest.password()));
     }
 
     public void activate() {
