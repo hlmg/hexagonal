@@ -54,4 +54,8 @@ public final class Member {
         this.passwordHash = passwordEncoder.encode(requireNonNull(password));
     }
 
+    public boolean isActive() {
+        return this.status == MemberStatus.ACTIVE;
+    }
+
 }
