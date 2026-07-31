@@ -10,7 +10,7 @@ import static org.springframework.util.Assert.state;
 @ToString
 public final class Member {
 
-    private String email;
+    private Email email;
 
     private String nickname;
 
@@ -18,8 +18,8 @@ public final class Member {
 
     private MemberStatus status;
 
-    private Member(String email, String nickname, String passwordHash) {
-        this.email = requireNonNull(email);
+    private Member(Email email, String nickname, String passwordHash) {
+        this.email = email;
         this.nickname = requireNonNull(nickname);
         this.passwordHash = requireNonNull(passwordHash);
 
@@ -27,7 +27,7 @@ public final class Member {
     }
 
     public static Member create(MemberCreateRequest createRequest, PasswordEncoder passwordEncoder) {
-        return new Member(createRequest.email(), createRequest.nickname(), passwordEncoder.encode(createRequest.password()));
+        return new Member(new Email(createRequest.email()), createRequest.nickname(), passwordEncoder.encode(createRequest.password()));
     }
 
     public void activate() {
