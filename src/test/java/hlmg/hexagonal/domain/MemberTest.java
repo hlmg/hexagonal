@@ -1,5 +1,6 @@
 package hlmg.hexagonal.domain;
 
+import static hlmg.hexagonal.domain.MemberFixture.*;
 import static org.assertj.core.api.Assertions.*;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -8,27 +9,18 @@ import org.junit.jupiter.api.Test;
 class MemberTest {
 
     Member member;
+
     PasswordEncoder passwordEncoder;
 
     @BeforeEach
     void setUp() {
-        this.passwordEncoder = new PasswordEncoder() {
-            @Override
-            public String encode(String password) {
-                return password.toUpperCase();
-            }
+        this.passwordEncoder = createPasswordEncoder();
 
-            @Override
-            public boolean matches(String password, String passwordHash) {
-                return encode(password).equals(passwordHash);
-            }
-        };
-
-        this.member = Member.create(new MemberCreateRequest("member@gmail.com", "nickname", "password"), passwordEncoder);
+        this.member = Member.register(createMemberRegisterRequest(), passwordEncoder);
     }
 
     @Test
-    void createMember() {
+    void registerMember() {
         assertThat(member.getStatus()).isEqualTo(MemberStatus.PENDING);
     }
 
