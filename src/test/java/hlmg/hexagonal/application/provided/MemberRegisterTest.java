@@ -1,11 +1,11 @@
 package hlmg.hexagonal.application.provided;
 
 import hlmg.hexagonal.SimpleTestConfiguration;
-import hlmg.hexagonal.domain.DuplicateEmailException;
-import hlmg.hexagonal.domain.Member;
-import hlmg.hexagonal.domain.MemberFixture;
-import hlmg.hexagonal.domain.MemberStatus;
+import hlmg.hexagonal.domain.*;
+import jakarta.validation.ConstraintViolationException;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,6 +31,26 @@ public record MemberRegisterTest(MemberRegister memberRegister) {
         memberRegister.register(MemberFixture.createMemberRegisterRequest());
         assertThatThrownBy(() -> memberRegister.register(MemberFixture.createMemberRegisterRequest()))
                 .isInstanceOf(DuplicateEmailException.class);
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+            // Invalid Email
+            "invalid-email, nickname, password",
+
+            // Invalid Nickname Length
+            "member@gmail.com, four, password",
+            "member@gmail.com, 123456789012345678901, password123",
+
+            // Invalid Password Length
+            "member@gmail.com, nickname, short",
+            "member@gmail.com, nickname, 123456789012345678901"
+    })
+    void memberRegisterRequestFail(String email, String nickname, String password) {
+        MemberRegisterRequest request = new MemberRegisterRequest(email, nickname, password);
+
+        assertThatThrownBy(() -> memberRegister.register(request))
+                .isInstanceOf(ConstraintViolationException.class);
     }
 
 }
