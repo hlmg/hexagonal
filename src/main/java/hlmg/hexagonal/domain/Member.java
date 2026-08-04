@@ -1,6 +1,6 @@
 package hlmg.hexagonal.domain;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,13 +14,8 @@ import static org.springframework.util.Assert.state;
 @Getter
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public final class Member {
+public final class Member extends AbstractEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Embedded
     @NaturalId
     private Email email;
 
@@ -28,7 +23,6 @@ public final class Member {
 
     private String passwordHash;
 
-    @Enumerated(EnumType.STRING)
     private MemberStatus status;
 
     private Member(Email email, String nickname, String passwordHash) {
