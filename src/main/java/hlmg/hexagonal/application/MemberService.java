@@ -32,6 +32,16 @@ public class MemberService implements MemberRegister {
         return member;
     }
 
+    @Override
+    public Member activate(Long memberId) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new IllegalArgumentException("Member not found: " + memberId));
+
+        member.activate();
+
+        return memberRepository.save(member);
+    }
+
     private void checkDuplicateEmail(MemberRegisterRequest registerRequest) {
         if (memberRepository.findByEmail(new Email(registerRequest.email())).isPresent()) {
             throw new DuplicateEmailException("Email already exist");

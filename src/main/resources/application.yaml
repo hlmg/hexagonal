@@ -1,3 +1,5 @@
 spring:
   application:
     name: hexagonal
+  jpa:
+    show-sql: true
