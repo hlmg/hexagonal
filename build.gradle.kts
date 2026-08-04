@@ -31,6 +31,7 @@ dependencies {
     annotationProcessor("org.projectlombok:lombok")
     testImplementation("org.springframework.boot:spring-boot-starter-data-jpa-test")
     testImplementation("org.springframework.boot:spring-boot-starter-webmvc-test")
+    testImplementation("org.junit-pioneer:junit-pioneer:2.3.0")
     testCompileOnly("org.projectlombok:lombok")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     testAnnotationProcessor("org.projectlombok:lombok")
@@ -38,4 +39,6 @@ dependencies {
 
 tasks.withType<Test> {
     useJUnitPlatform()
+
+    jvmArgs("-XX:+EnableDynamicAgentLoading")
 }
