@@ -1,5 +1,6 @@
 package hlmg.hexagonal.application;
 
+import hlmg.hexagonal.application.provided.MemberFinder;
 import hlmg.hexagonal.application.provided.MemberRegister;
 import hlmg.hexagonal.application.required.EmailSender;
 import hlmg.hexagonal.application.required.MemberRepository;
@@ -13,8 +14,9 @@ import org.springframework.validation.annotation.Validated;
 @RequiredArgsConstructor
 @Validated
 @Service
-public class MemberService implements MemberRegister {
+public class MemberModifyService implements MemberRegister {
 
+    private final MemberFinder memberFinder;
     private final MemberRepository memberRepository;
     private final EmailSender emailSender;
     private final PasswordEncoder passwordEncoder;
@@ -34,8 +36,7 @@ public class MemberService implements MemberRegister {
 
     @Override
     public Member activate(Long memberId) {
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new IllegalArgumentException("Member not found: " + memberId));
+        Member member = memberFinder.find(memberId);
 
         member.activate();
 
