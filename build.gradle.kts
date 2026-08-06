@@ -43,3 +43,7 @@ tasks.withType<Test> {
 
     jvmArgs("-XX:+EnableDynamicAgentLoading")
 }
+
+spotbugs {
+    excludeFilter.set(file("${projectDir}/spotbugs-exclude-filter.xml"))
+}
