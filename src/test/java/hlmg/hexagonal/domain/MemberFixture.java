@@ -1,11 +1,16 @@
 package hlmg.hexagonal.domain;
 
+import jakarta.validation.Valid;
 import org.jspecify.annotations.NonNull;
 
 public class MemberFixture {
 
     public static @NonNull MemberRegisterRequest createMemberRegisterRequest() {
-        return new MemberRegisterRequest("member@gmail.com", "nickname", "password");
+        return createMemberRegisterRequest("member@gmail.com");
+    }
+
+    public static @Valid MemberRegisterRequest createMemberRegisterRequest(String email) {
+        return new MemberRegisterRequest(email, "nickname", "password");
     }
 
     public static @NonNull PasswordEncoder createPasswordEncoder() {

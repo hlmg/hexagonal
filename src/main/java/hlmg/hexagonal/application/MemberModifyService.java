@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
+import java.util.Optional;
+
 @Transactional
 @RequiredArgsConstructor
 @Validated
@@ -43,10 +45,46 @@ public class MemberModifyService implements MemberRegister {
         return memberRepository.save(member);
     }
 
+    @Override
+    public Member deactivate(Long memberId) {
+        Member member = memberFinder.find(memberId);
+
+        member.deactivate();
+
+        return memberRepository.save(member);
+    }
+
+    @Override
+    public Member updateInfo(Long memberId, MemberInfoUpdateRequest memberInfoUpdateRequest) {
+        Member member = memberFinder.find(memberId);
+
+        checkDuplicateProfile(member, memberInfoUpdateRequest.profileAddress());
+
+        member.updateInfo(memberInfoUpdateRequest);
+
+        return memberRepository.save(member);
+    }
+
     private void checkDuplicateEmail(MemberRegisterRequest registerRequest) {
         if (memberRepository.findByEmail(new Email(registerRequest.email())).isPresent()) {
             throw new DuplicateEmailException("Email already exist");
         }
+    }
+
+    private void checkDuplicateProfile(Member member, String profileAddress) {
+        if (profileAddress.isEmpty()) return;
+        if (isSameProfileAddress(member.getDetail().getProfile(), profileAddress)) return;
+
+        if (memberRepository.findByProfile(new Profile(profileAddress)).isPresent()) {
+            throw new DuplicateProfileException("Profile address already exist");
+        }
+    }
+
+    private boolean isSameProfileAddress(Profile profile, String profileAddress) {
+        return Optional.ofNullable(profile)
+                .map(Profile::address)
+                .map(address -> address.equals(profileAddress))
+                .orElse(false);
     }
 
     private void sendWelcomeEmail(Member member) {

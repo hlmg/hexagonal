@@ -1,10 +1,13 @@
 package hlmg.hexagonal.domain;
 
-import static hlmg.hexagonal.domain.MemberFixture.*;
-import static org.assertj.core.api.Assertions.*;
-
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import static hlmg.hexagonal.domain.MemberFixture.createMemberRegisterRequest;
+import static hlmg.hexagonal.domain.MemberFixture.createPasswordEncoder;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class MemberTest {
 
@@ -22,6 +25,7 @@ class MemberTest {
     @Test
     void registerMember() {
         assertThat(member.getStatus()).isEqualTo(MemberStatus.PENDING);
+        assertThat(member.getDetail().getRegisteredAt()).isNotNull();
     }
 
     @Test
@@ -29,6 +33,7 @@ class MemberTest {
         member.activate();
 
         assertThat(member.getStatus()).isEqualTo(MemberStatus.ACTIVE);
+        assertThat(member.getDetail().getActivatedAt()).isNotNull();
     }
 
     @Test
@@ -46,6 +51,7 @@ class MemberTest {
         member.deactivate();
 
         assertThat(member.getStatus()).isEqualTo(MemberStatus.DEACTIVATED);
+        assertThat(member.getDetail().getDeactivatedAt()).isNotNull();
     }
 
     @Test
@@ -68,12 +74,23 @@ class MemberTest {
     }
 
     @Test
-    void changeNickname() {
-        assertThat(member.getNickname()).isEqualTo("nickname");
+    void updateInfo() {
+        member.activate();
+        MemberInfoUpdateRequest updateRequest = new MemberInfoUpdateRequest("newNickname", "newprofile", "newIntroduction");
 
-        member.changeNickname("newNickname");
+        member.updateInfo(updateRequest);
 
-        assertThat(member.getNickname()).isEqualTo("newNickname");
+        assertThat(member.getNickname()).isEqualTo(updateRequest.nickname());
+        assertThat(member.getDetail().getProfile().address()).isEqualTo(updateRequest.profileAddress());
+        assertThat(member.getDetail().getIntroduction()).isEqualTo(updateRequest.introduction());
+    }
+
+    @Test
+    void updateInfoFailWhenNotActivated() {
+        MemberInfoUpdateRequest updateRequest = new MemberInfoUpdateRequest("newNickname", "newprofile", "newIntroduction");
+
+        Assertions.assertThatThrownBy(() -> member.updateInfo(updateRequest))
+                .isInstanceOf(IllegalStateException.class);
     }
 
     @Test

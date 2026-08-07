@@ -12,7 +12,7 @@ import static org.springframework.util.Assert.state;
 
 @Entity
 @Getter
-@ToString(callSuper = true)
+@ToString(callSuper = true, exclude = "detail")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public final class Member extends AbstractEntity {
 
@@ -25,12 +25,15 @@ public final class Member extends AbstractEntity {
 
     private MemberStatus status;
 
+    private MemberDetail detail;
+
     private Member(Email email, String nickname, String passwordHash) {
         this.email = email;
         this.nickname = requireNonNull(nickname);
         this.passwordHash = requireNonNull(passwordHash);
 
         this.status = MemberStatus.PENDING;
+        this.detail = MemberDetail.create();
     }
 
     public static Member register(MemberRegisterRequest createRequest, PasswordEncoder passwordEncoder) {
@@ -41,20 +44,25 @@ public final class Member extends AbstractEntity {
         state(status == MemberStatus.PENDING, "member is not pending");
 
         this.status = MemberStatus.ACTIVE;
+        this.detail.activate();
     }
 
     public void deactivate() {
         state(status == MemberStatus.ACTIVE, "member is not active");
 
         this.status = MemberStatus.DEACTIVATED;
+        this.detail.deactivate();
     }
 
     public boolean verifyPassword(String password, PasswordEncoder passwordEncoder) {
         return passwordEncoder.matches(password, this.passwordHash);
     }
 
-    public void changeNickname(String nickname) {
-        this.nickname = requireNonNull(nickname);
+    public void updateInfo(MemberInfoUpdateRequest updateRequest) {
+        state(status == MemberStatus.ACTIVE, "member is not active");
+
+        this.nickname = requireNonNull(updateRequest.nickname());
+        this.detail.updateInfo(updateRequest);
     }
 
     public void changePassword(String password, PasswordEncoder passwordEncoder) {
