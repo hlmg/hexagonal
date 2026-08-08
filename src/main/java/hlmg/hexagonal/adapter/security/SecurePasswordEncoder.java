@@ -1,6 +1,6 @@
 package hlmg.hexagonal.adapter.security;
 
-import hlmg.hexagonal.domain.PasswordEncoder;
+import hlmg.hexagonal.domain.member.PasswordEncoder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

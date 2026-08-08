@@ -1,8 +1,8 @@
 package hlmg.hexagonal;
 
-import hlmg.hexagonal.application.required.EmailSender;
-import hlmg.hexagonal.domain.MemberFixture;
-import hlmg.hexagonal.domain.PasswordEncoder;
+import hlmg.hexagonal.application.member.required.EmailSender;
+import hlmg.hexagonal.domain.member.MemberFixture;
+import hlmg.hexagonal.domain.member.PasswordEncoder;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;

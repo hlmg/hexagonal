@@ -1,6 +1,6 @@
 package hlmg.hexagonal.adapter.integration;
 
-import hlmg.hexagonal.domain.Email;
+import hlmg.hexagonal.domain.shared.Email;
 import org.junit.jupiter.api.Test;
 import org.junitpioneer.jupiter.StdIo;
 import org.junitpioneer.jupiter.StdOut;
