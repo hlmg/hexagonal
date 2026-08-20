@@ -38,8 +38,8 @@ public final class Member extends AbstractEntity {
         this.detail = MemberDetail.create();
     }
 
-    public static Member register(MemberRegisterRequest createRequest, PasswordEncoder passwordEncoder) {
-        return new Member(new Email(createRequest.email()), createRequest.nickname(), passwordEncoder.encode(createRequest.password()));
+    public static Member register(MemberRegisterInfo registerInfo, PasswordEncoder passwordEncoder) {
+        return new Member(new Email(registerInfo.email()), registerInfo.nickname(), passwordEncoder.encode(registerInfo.password()));
     }
 
     public void activate() {
@@ -60,11 +60,11 @@ public final class Member extends AbstractEntity {
         return passwordEncoder.matches(password, this.passwordHash);
     }
 
-    public void updateInfo(MemberInfoUpdateRequest updateRequest) {
+    public void updateInfo(MemberUpdateInfo updateInfo) {
         state(status == MemberStatus.ACTIVE, "member is not active");
 
-        this.nickname = requireNonNull(updateRequest.nickname());
-        this.detail.updateInfo(updateRequest);
+        this.nickname = requireNonNull(updateInfo.nickname());
+        this.detail.updateInfo(updateInfo);
     }
 
     public void changePassword(String password, PasswordEncoder passwordEncoder) {

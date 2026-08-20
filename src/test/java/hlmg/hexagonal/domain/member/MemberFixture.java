@@ -1,5 +1,6 @@
 package hlmg.hexagonal.domain.member;
 
+import hlmg.hexagonal.application.member.provided.MemberRegisterRequest;
 import jakarta.validation.Valid;
 import org.jspecify.annotations.NonNull;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -29,7 +30,7 @@ public class MemberFixture {
     }
 
     public static Member createMember(Long id) {
-        Member member = Member.register(createMemberRegisterRequest(), createPasswordEncoder());
+        Member member = Member.register(createMemberRegisterRequest().toInfo(), createPasswordEncoder());
         ReflectionTestUtils.setField(member, "id", id);
         return member;
     }

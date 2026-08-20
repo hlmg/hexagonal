@@ -1,8 +1,6 @@
 package hlmg.hexagonal.application.member.provided;
 
 import hlmg.hexagonal.domain.member.Member;
-import hlmg.hexagonal.domain.member.MemberInfoUpdateRequest;
-import hlmg.hexagonal.domain.member.MemberRegisterRequest;
 import jakarta.validation.Valid;
 
 public interface MemberRegister {

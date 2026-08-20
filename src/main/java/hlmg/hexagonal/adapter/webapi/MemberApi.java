@@ -2,8 +2,8 @@ package hlmg.hexagonal.adapter.webapi;
 
 import hlmg.hexagonal.adapter.webapi.dto.MemberRegisterResponse;
 import hlmg.hexagonal.application.member.provided.MemberRegister;
+import hlmg.hexagonal.application.member.provided.MemberRegisterRequest;
 import hlmg.hexagonal.domain.member.Member;
-import hlmg.hexagonal.domain.member.MemberRegisterRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;

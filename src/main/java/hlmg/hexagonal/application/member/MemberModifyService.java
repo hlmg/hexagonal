@@ -1,7 +1,9 @@
 package hlmg.hexagonal.application.member;
 
 import hlmg.hexagonal.application.member.provided.MemberFinder;
+import hlmg.hexagonal.application.member.provided.MemberInfoUpdateRequest;
 import hlmg.hexagonal.application.member.provided.MemberRegister;
+import hlmg.hexagonal.application.member.provided.MemberRegisterRequest;
 import hlmg.hexagonal.application.member.required.EmailSender;
 import hlmg.hexagonal.application.member.required.MemberRepository;
 import hlmg.hexagonal.domain.member.*;
@@ -28,7 +30,7 @@ public class MemberModifyService implements MemberRegister {
     public Member register(MemberRegisterRequest registerRequest) {
         checkDuplicateEmail(registerRequest);
 
-        Member member = Member.register(registerRequest, passwordEncoder);
+        Member member = Member.register(registerRequest.toInfo(), passwordEncoder);
 
         memberRepository.save(member);
 
@@ -61,7 +63,7 @@ public class MemberModifyService implements MemberRegister {
 
         checkDuplicateProfile(member, memberInfoUpdateRequest.profileAddress());
 
-        member.updateInfo(memberInfoUpdateRequest);
+        member.updateInfo(memberInfoUpdateRequest.toInfo());
 
         return memberRepository.save(member);
     }

@@ -1,5 +1,6 @@
 package hlmg.hexagonal.domain.member;
 
+import hlmg.hexagonal.application.member.provided.MemberInfoUpdateRequest;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,7 +20,7 @@ class MemberTest {
     void setUp() {
         this.passwordEncoder = createPasswordEncoder();
 
-        this.member = Member.register(createMemberRegisterRequest(), passwordEncoder);
+        this.member = Member.register(createMemberRegisterRequest().toInfo(), passwordEncoder);
     }
 
     @Test
@@ -78,7 +79,7 @@ class MemberTest {
         member.activate();
         MemberInfoUpdateRequest updateRequest = new MemberInfoUpdateRequest("newNickname", "newprofile", "newIntroduction");
 
-        member.updateInfo(updateRequest);
+        member.updateInfo(updateRequest.toInfo());
 
         assertThat(member.getNickname()).isEqualTo(updateRequest.nickname());
         assertThat(member.getDetail().getProfile().address()).isEqualTo(updateRequest.profileAddress());
@@ -89,7 +90,7 @@ class MemberTest {
     void updateInfoFailWhenNotActivated() {
         MemberInfoUpdateRequest updateRequest = new MemberInfoUpdateRequest("newNickname", "newprofile", "newIntroduction");
 
-        Assertions.assertThatThrownBy(() -> member.updateInfo(updateRequest))
+        Assertions.assertThatThrownBy(() -> member.updateInfo(updateRequest.toInfo()))
                 .isInstanceOf(IllegalStateException.class);
     }
 
