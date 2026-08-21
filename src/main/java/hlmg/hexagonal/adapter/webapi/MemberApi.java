@@ -22,7 +22,7 @@ class MemberApi {
     public MemberRegisterResponse register(@RequestBody @Valid MemberRegisterRequest request) {
         Member member = memberRegister.register(request);
 
-        return MemberRegisterResponse.of(member);
+        return MemberRegisterResponse.from(member);
     }
 
 }

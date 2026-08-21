@@ -29,25 +29,25 @@ public final class MemberDetail extends AbstractEntity {
 
     private @Nullable LocalDateTime deactivatedAt;
 
-    public static MemberDetail create() {
+    static MemberDetail create() {
         MemberDetail memberDetail = new MemberDetail();
         memberDetail.registeredAt = LocalDateTime.now();
         return memberDetail;
     }
 
-    public void activate() {
+    void activate() {
         state(activatedAt == null, "Activated at is already set");
 
         this.activatedAt = LocalDateTime.now();
     }
 
-    public void deactivate() {
+    void deactivate() {
         state(deactivatedAt == null, "Deactivated at is already set");
 
         this.deactivatedAt = LocalDateTime.now();
     }
 
-    public void updateInfo(MemberUpdateInfo updateInfo) {
+    void updateInfo(MemberUpdateInfo updateInfo) {
         this.profile = convertToProfile(updateInfo.profileAddress());
         this.introduction = requireNonNull(updateInfo.introduction());
     }
