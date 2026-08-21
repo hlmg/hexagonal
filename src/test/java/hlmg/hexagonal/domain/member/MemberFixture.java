@@ -29,9 +29,19 @@ public class MemberFixture {
         };
     }
 
+    public static Member createMember() {
+        return Member.register(createMemberRegisterRequest().toInfo(), createPasswordEncoder());
+    }
+
     public static Member createMember(Long id) {
-        Member member = Member.register(createMemberRegisterRequest().toInfo(), createPasswordEncoder());
+        Member member = createMember();
         ReflectionTestUtils.setField(member, "id", id);
+        return member;
+    }
+
+    public static Member createActiveMember() {
+        Member member = createMember();
+        member.activate();
         return member;
     }
 
