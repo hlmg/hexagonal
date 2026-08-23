@@ -1,6 +1,7 @@
 package hlmg.hexagonal.application.member.required;
 
 import hlmg.hexagonal.domain.member.Member;
+import hlmg.hexagonal.domain.member.MemberRegisterInfo;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
@@ -30,10 +31,11 @@ class MemberRepositoryTest {
 
     @Test
     void createFailWhenEmailAlreadyExist() {
-        Member member = Member.register(createMemberRegisterRequest().toInfo(), createPasswordEncoder());
+        MemberRegisterInfo registerInfo = createMemberRegisterRequest().toInfo();
+        Member member = Member.register(registerInfo, createPasswordEncoder());
         memberRepository.save(member);
 
-        Member member2 = Member.register(createMemberRegisterRequest().toInfo(), createPasswordEncoder());
+        Member member2 = Member.register(registerInfo, createPasswordEncoder());
         assertThatThrownBy(() -> memberRepository.save(member2))
                 .isInstanceOf(DataIntegrityViolationException.class);
     }

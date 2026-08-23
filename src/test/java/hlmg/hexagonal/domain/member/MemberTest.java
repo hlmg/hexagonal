@@ -1,11 +1,11 @@
 package hlmg.hexagonal.domain.member;
 
 import hlmg.hexagonal.application.member.provided.MemberInfoUpdateRequest;
+import hlmg.hexagonal.application.member.provided.MemberRegisterRequest;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static hlmg.hexagonal.domain.member.MemberFixture.createMemberRegisterRequest;
 import static hlmg.hexagonal.domain.member.MemberFixture.createPasswordEncoder;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -13,14 +13,15 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 class MemberTest {
 
     Member member;
-
     PasswordEncoder passwordEncoder;
+    MemberRegisterRequest memberRegisterRequest;
 
     @BeforeEach
     void setUp() {
-        this.passwordEncoder = createPasswordEncoder();
+        passwordEncoder = createPasswordEncoder();
 
-        this.member = Member.register(createMemberRegisterRequest().toInfo(), passwordEncoder);
+        memberRegisterRequest = MemberFixture.createMemberRegisterRequest();
+        member = Member.register(memberRegisterRequest.toInfo(), passwordEncoder);
     }
 
     @Test
@@ -57,7 +58,8 @@ class MemberTest {
 
     @Test
     void deactivateFailWhenPending() {
-        assertThatThrownBy(() -> member.deactivate()).isInstanceOf(IllegalStateException.class);
+        assertThatThrownBy(() -> member.deactivate())
+                .isInstanceOf(IllegalStateException.class);
     }
 
     @Test
@@ -70,7 +72,7 @@ class MemberTest {
 
     @Test
     void verifyPassword() {
-        assertThat(member.verifyPassword("password", passwordEncoder)).isTrue();
+        assertThat(member.verifyPassword(memberRegisterRequest.password(), passwordEncoder)).isTrue();
         assertThat(member.verifyPassword("wrongPassword", passwordEncoder)).isFalse();
     }
 

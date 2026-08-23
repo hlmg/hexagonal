@@ -29,8 +29,10 @@ class MemberRegisterTest {
 
     @Test
     void registerFailWhenEmailAlreadyExist() {
-        memberRegister.register(MemberFixture.createMemberRegisterRequest());
-        assertThatThrownBy(() -> memberRegister.register(MemberFixture.createMemberRegisterRequest()))
+        MemberRegisterRequest memberRegisterRequest = MemberFixture.createMemberRegisterRequest();
+        memberRegister.register(memberRegisterRequest);
+
+        assertThatThrownBy(() -> memberRegister.register(memberRegisterRequest))
                 .isInstanceOf(DuplicateEmailException.class);
     }
 
