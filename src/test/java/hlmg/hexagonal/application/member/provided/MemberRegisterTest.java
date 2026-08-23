@@ -1,23 +1,23 @@
 package hlmg.hexagonal.application.member.provided;
 
-import hlmg.hexagonal.SimpleTestConfiguration;
 import hlmg.hexagonal.domain.member.*;
+import hlmg.hexagonal.support.stereotype.ApplicationServiceTest;
 import jakarta.persistence.EntityManager;
 import jakarta.validation.ConstraintViolationException;
+import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
-import org.springframework.transaction.annotation.Transactional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-@Transactional
-@Import(SimpleTestConfiguration.class)
-@SpringBootTest
-record MemberRegisterTest(MemberRegister memberRegister, EntityManager entityManager) {
+@ApplicationServiceTest
+@RequiredArgsConstructor
+class MemberRegisterTest {
+
+    final MemberRegister memberRegister;
+    final EntityManager entityManager;
 
     @Test
     void register() {

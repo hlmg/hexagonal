@@ -8,17 +8,13 @@ import hlmg.hexagonal.application.member.required.EmailSender;
 import hlmg.hexagonal.application.member.required.MemberRepository;
 import hlmg.hexagonal.domain.member.*;
 import hlmg.hexagonal.domain.shared.Email;
+import hlmg.hexagonal.support.stereotype.ValidatedApplicationService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.annotation.Validated;
 
 import java.util.Optional;
 
-@Transactional
+@ValidatedApplicationService
 @RequiredArgsConstructor
-@Validated
-@Service
 public class MemberModifyService implements MemberRegister {
 
     private final MemberFinder memberFinder;

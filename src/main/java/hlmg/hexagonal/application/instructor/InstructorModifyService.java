@@ -8,15 +8,11 @@ import hlmg.hexagonal.application.instructor.required.InstructorRepository;
 import hlmg.hexagonal.application.member.provided.MemberFinder;
 import hlmg.hexagonal.domain.instructor.Instructor;
 import hlmg.hexagonal.domain.member.Member;
+import hlmg.hexagonal.support.stereotype.ValidatedApplicationService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.annotation.Validated;
 
-@Transactional
+@ValidatedApplicationService
 @RequiredArgsConstructor
-@Validated
-@Service
 public class InstructorModifyService implements InstructorApplication {
 
     private final InstructorRepository instructorRepository;

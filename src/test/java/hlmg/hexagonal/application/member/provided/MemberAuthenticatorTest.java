@@ -1,20 +1,20 @@
 package hlmg.hexagonal.application.member.provided;
 
-import hlmg.hexagonal.SimpleTestConfiguration;
 import hlmg.hexagonal.domain.member.Member;
 import hlmg.hexagonal.domain.member.MemberFixture;
+import hlmg.hexagonal.support.stereotype.ApplicationServiceTest;
+import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
-import org.springframework.transaction.annotation.Transactional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-@Transactional
-@Import(SimpleTestConfiguration.class)
-@SpringBootTest
-record MemberAuthenticatorTest(MemberAuthenticator memberAuthenticator, MemberRegister memberRegister) {
+@ApplicationServiceTest
+@RequiredArgsConstructor
+class MemberAuthenticatorTest {
+
+    final MemberAuthenticator memberAuthenticator;
+    final MemberRegister memberRegister;
 
     @Test
     void login() {

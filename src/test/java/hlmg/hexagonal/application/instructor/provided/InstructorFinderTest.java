@@ -1,22 +1,17 @@
 package hlmg.hexagonal.application.instructor.provided;
 
-import hlmg.hexagonal.SimpleTestConfiguration;
 import hlmg.hexagonal.application.member.provided.MemberRegister;
 import hlmg.hexagonal.domain.instructor.Instructor;
 import hlmg.hexagonal.domain.member.Member;
 import hlmg.hexagonal.domain.member.MemberFixture;
+import hlmg.hexagonal.support.stereotype.ApplicationServiceTest;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
-import org.springframework.transaction.annotation.Transactional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@ApplicationServiceTest
 @RequiredArgsConstructor
-@Transactional
-@Import(SimpleTestConfiguration.class)
-@SpringBootTest
 class InstructorFinderTest {
 
     final InstructorFinder instructorFinder;

@@ -1,7 +1,7 @@
 package hlmg.hexagonal.application.member.required;
 
 import hlmg.hexagonal.domain.member.Member;
-import jakarta.persistence.EntityManager;
+import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -12,7 +12,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @DataJpaTest
-record MemberRepositoryTest(MemberRepository memberRepository, EntityManager entityManager) {
+@RequiredArgsConstructor
+class MemberRepositoryTest {
+
+    final MemberRepository memberRepository;
 
     @Test
     void createMember() {

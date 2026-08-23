@@ -1,21 +1,22 @@
 package hlmg.hexagonal.application.member.provided;
 
-import hlmg.hexagonal.SimpleTestConfiguration;
 import hlmg.hexagonal.domain.member.Member;
 import hlmg.hexagonal.domain.member.MemberFixture;
+import hlmg.hexagonal.support.stereotype.ApplicationServiceTest;
 import jakarta.persistence.EntityManager;
+import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
-import org.springframework.transaction.annotation.Transactional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-@Transactional
-@Import(SimpleTestConfiguration.class)
-@SpringBootTest
-record MemberFinderTest(MemberFinder memberFinder, MemberRegister memberRegister, EntityManager entityManager) {
+@ApplicationServiceTest
+@RequiredArgsConstructor
+class MemberFinderTest {
+
+    final MemberFinder memberFinder;
+    final MemberRegister memberRegister;
+    final EntityManager entityManager;
 
     @Test
     void find() {

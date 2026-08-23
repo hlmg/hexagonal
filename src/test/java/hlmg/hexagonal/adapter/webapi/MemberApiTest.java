@@ -5,24 +5,20 @@ import hlmg.hexagonal.application.member.provided.MemberRegister;
 import hlmg.hexagonal.application.member.provided.MemberRegisterRequest;
 import hlmg.hexagonal.application.member.required.MemberRepository;
 import hlmg.hexagonal.domain.member.Member;
+import hlmg.hexagonal.support.stereotype.WebApiAdapterTest;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.assertj.MockMvcTester;
 import org.springframework.test.web.servlet.assertj.MvcTestResult;
-import org.springframework.transaction.annotation.Transactional;
 import tools.jackson.databind.ObjectMapper;
 
 import static hlmg.hexagonal.domain.member.MemberFixture.createMemberRegisterRequest;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
-@SpringBootTest
-@AutoConfigureMockMvc
-@Transactional
+@WebApiAdapterTest
 @RequiredArgsConstructor
 class MemberApiTest {
 

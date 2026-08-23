@@ -7,15 +7,11 @@ import hlmg.hexagonal.application.member.required.MemberRepository;
 import hlmg.hexagonal.domain.member.Member;
 import hlmg.hexagonal.domain.member.PasswordEncoder;
 import hlmg.hexagonal.domain.shared.Email;
+import hlmg.hexagonal.support.stereotype.ValidatedApplicationService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.annotation.Validated;
 
-@Transactional(readOnly = true)
+@ValidatedApplicationService
 @RequiredArgsConstructor
-@Validated
-@Service
 class MemberAuthenticationService implements MemberAuthenticator {
 
     private final MemberRepository memberRepository;
