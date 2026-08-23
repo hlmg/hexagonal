@@ -1,12 +1,15 @@
 package hlmg.hexagonal.application.member.provided;
 
 import hlmg.hexagonal.SimpleTestConfiguration;
+import hlmg.hexagonal.domain.member.Member;
 import hlmg.hexagonal.domain.member.MemberFixture;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.transaction.annotation.Transactional;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @Transactional
 @Import(SimpleTestConfiguration.class)
@@ -16,9 +19,12 @@ record MemberAuthenticatorTest(MemberAuthenticator memberAuthenticator, MemberRe
     @Test
     void login() {
         MemberRegisterRequest memberRegisterRequest = MemberFixture.createMemberRegisterRequest();
-        memberRegister.register(memberRegisterRequest).activate();
+        Member member = memberRegister.register(memberRegisterRequest);
+        member.activate();
 
-        memberAuthenticator.login(new MemberLoginRequest(memberRegisterRequest.email(), memberRegisterRequest.password()));
+        Member loggedIn = memberAuthenticator.login(new MemberLoginRequest(memberRegisterRequest.email(), memberRegisterRequest.password()));
+
+        assertThat(loggedIn).isEqualTo(member);
     }
 
     @Test
@@ -26,7 +32,7 @@ record MemberAuthenticatorTest(MemberAuthenticator memberAuthenticator, MemberRe
         MemberRegisterRequest memberRegisterRequest = MemberFixture.createMemberRegisterRequest();
         memberRegister.register(memberRegisterRequest);
 
-        Assertions.assertThatThrownBy(() ->
+        assertThatThrownBy(() ->
                 memberAuthenticator.login(new MemberLoginRequest(memberRegisterRequest.email(), memberRegisterRequest.password()))
         ).isInstanceOf(LoginFailedException.class);
     }
@@ -36,7 +42,7 @@ record MemberAuthenticatorTest(MemberAuthenticator memberAuthenticator, MemberRe
         MemberRegisterRequest memberRegisterRequest = MemberFixture.createMemberRegisterRequest();
         memberRegister.register(memberRegisterRequest);
 
-        Assertions.assertThatThrownBy(() ->
+        assertThatThrownBy(() ->
                 memberAuthenticator.login(new MemberLoginRequest("notexist@gmail.com", memberRegisterRequest.password()))
         ).isInstanceOf(LoginFailedException.class);
     }
@@ -46,7 +52,7 @@ record MemberAuthenticatorTest(MemberAuthenticator memberAuthenticator, MemberRe
         MemberRegisterRequest memberRegisterRequest = MemberFixture.createMemberRegisterRequest();
         memberRegister.register(memberRegisterRequest);
 
-        Assertions.assertThatThrownBy(() ->
+        assertThatThrownBy(() ->
                 memberAuthenticator.login(new MemberLoginRequest(memberRegisterRequest.email(), "wrongpassword"))
         ).isInstanceOf(LoginFailedException.class);
     }
