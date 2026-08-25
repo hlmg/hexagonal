@@ -15,6 +15,12 @@ public class InstructorFixture {
         return createInstructor(MemberFixture.createActiveMember());
     }
 
+    public static Instructor createActiveInstructor() {
+        Instructor instructor = createInstructor(MemberFixture.createActiveMember());
+        instructor.approve();
+        return instructor;
+    }
+
     public static InstructorApplyRequest createApplyRequest(Member member) {
         return new InstructorApplyRequest(member.getId());
     }
