@@ -6,7 +6,6 @@ import hlmg.hexagonal.domain.member.MemberFixture;
 
 public class InstructorFixture {
 
-
     public static Instructor createInstructor(Member member) {
         return Instructor.apply(member);
     }
@@ -16,7 +15,11 @@ public class InstructorFixture {
     }
 
     public static Instructor createActiveInstructor() {
-        Instructor instructor = createInstructor(MemberFixture.createActiveMember());
+        return createActiveInstructor(MemberFixture.createActiveMember());
+    }
+
+    public static Instructor createActiveInstructor(Member member) {
+        Instructor instructor = createInstructor(member);
         instructor.approve();
         return instructor;
     }

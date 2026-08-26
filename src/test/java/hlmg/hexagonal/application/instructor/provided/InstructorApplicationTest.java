@@ -1,13 +1,12 @@
 package hlmg.hexagonal.application.instructor.provided;
 
 import hlmg.hexagonal.application.instructor.required.InstructorRepository;
-import hlmg.hexagonal.application.member.required.MemberRepository;
 import hlmg.hexagonal.domain.instructor.Instructor;
 import hlmg.hexagonal.domain.instructor.InstructorFixture;
 import hlmg.hexagonal.domain.instructor.InstructorStatus;
 import hlmg.hexagonal.domain.member.Member;
-import hlmg.hexagonal.domain.member.MemberFixture;
 import hlmg.hexagonal.support.stereotype.ApplicationServiceTest;
+import hlmg.hexagonal.support.test.BaseApplicationServiceTest;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
 
@@ -16,16 +15,14 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @ApplicationServiceTest
 @RequiredArgsConstructor
-class InstructorApplicationTest {
+class InstructorApplicationTest extends BaseApplicationServiceTest {
 
     final InstructorApplication instructorApplication;
     final InstructorRepository instructorRepository;
-    final MemberRepository memberRepository;
 
     @Test
     void apply() {
-        Member member = MemberFixture.createActiveMember();
-        memberRepository.save(member);
+        Member member = prepareMember();
 
         Instructor instructor = instructorApplication.apply(InstructorFixture.createApplyRequest(member));
 
@@ -37,8 +34,7 @@ class InstructorApplicationTest {
 
     @Test
     void applyFailWhenAlreadyApplied() {
-        Member member = MemberFixture.createActiveMember();
-        memberRepository.save(member);
+        Member member = prepareMember();
         instructorApplication.apply(InstructorFixture.createApplyRequest(member));
 
         assertThatThrownBy(() -> instructorApplication.apply(InstructorFixture.createApplyRequest(member)))
@@ -60,8 +56,7 @@ class InstructorApplicationTest {
     }
 
     private Instructor preparePendingInstructor() {
-        Member member = MemberFixture.createActiveMember();
-        memberRepository.save(member);
+        Member member = prepareMember();
 
         return instructorApplication.apply(InstructorFixture.createApplyRequest(member));
     }

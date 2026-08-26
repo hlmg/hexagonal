@@ -13,6 +13,7 @@ import static java.util.Objects.requireNonNull;
 import static org.springframework.util.Assert.state;
 
 @Entity
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"instructor_id", "title"}))
 @Getter
 @ToString(callSuper = true, exclude = {"instructor", "detail"})
 @NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)

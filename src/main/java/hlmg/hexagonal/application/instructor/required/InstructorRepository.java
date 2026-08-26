@@ -11,8 +11,6 @@ public interface InstructorRepository extends Repository<Instructor, Long> {
 
     Optional<Instructor> findById(Long instructorId);
 
-    Instructor getById(Long id);
-
     Optional<Instructor> findByMemberId(Long memberId);
 
 }
