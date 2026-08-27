@@ -33,7 +33,7 @@ public class Course extends AbstractEntity {
     private CourseDetail detail;
 
     public Course(Instructor instructor, String title, @Nullable String description) {
-        requireNonNull(instructor).ensureActive();
+        instructor.ensureActive();
 
         this.instructor = instructor;
         this.title = requireNonNull(title);

@@ -50,7 +50,7 @@ public final class Member extends AbstractEntity {
     }
 
     public void deactivate() {
-        state(status == MemberStatus.ACTIVE, "member is not active");
+        ensureActive();
 
         this.status = MemberStatus.DEACTIVATED;
         this.detail.deactivate();
@@ -61,7 +61,7 @@ public final class Member extends AbstractEntity {
     }
 
     public void updateInfo(MemberUpdateInfo updateInfo) {
-        state(status == MemberStatus.ACTIVE, "member is not active");
+        ensureActive();
 
         this.nickname = requireNonNull(updateInfo.nickname());
         this.detail.updateInfo(updateInfo);
@@ -73,6 +73,10 @@ public final class Member extends AbstractEntity {
 
     public boolean isActive() {
         return this.status == MemberStatus.ACTIVE;
+    }
+
+    public void ensureActive() {
+        state(isActive(), "member status must be ACTIVE");
     }
 
 }

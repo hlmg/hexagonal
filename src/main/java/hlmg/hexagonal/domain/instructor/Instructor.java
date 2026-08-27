@@ -26,8 +26,7 @@ public class Instructor extends AbstractEntity {
     private InstructorStatus status;
 
     public static Instructor apply(Member member) {
-        // TODO: Use member.ensure
-        state(member.isActive(), "member must be active");
+        member.ensureActive();
 
         Instructor instructor = new Instructor();
         instructor.member = member;
