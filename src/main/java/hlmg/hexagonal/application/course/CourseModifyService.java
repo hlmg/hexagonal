@@ -11,7 +11,7 @@ import lombok.RequiredArgsConstructor;
 
 @ValidatedApplicationService
 @RequiredArgsConstructor
-public class CourseModifyService implements CourseCreator {
+public class CourseModifyService implements CourseCreator, CoursePublisher {
 
     private final CourseRepository courseRepository;
     private final CourseFinder courseFinder;
@@ -36,6 +36,33 @@ public class CourseModifyService implements CourseCreator {
         courseValidator.validateForUpdate(course, infoUpdateRequest);
 
         course.updateInfo(infoUpdateRequest.toInfo());
+
+        return courseRepository.save(course);
+    }
+
+    @Override
+    public Course submitForReview(Long courseId) {
+        Course course = courseFinder.find(courseId);
+
+        course.submitForReview();
+
+        return courseRepository.save(course);
+    }
+
+    @Override
+    public Course publish(Long courseId) {
+        Course course = courseFinder.find(courseId);
+
+        course.publish();
+
+        return courseRepository.save(course);
+    }
+
+    @Override
+    public Course archive(Long courseId) {
+        Course course = courseFinder.find(courseId);
+
+        course.archive();
 
         return courseRepository.save(course);
     }
