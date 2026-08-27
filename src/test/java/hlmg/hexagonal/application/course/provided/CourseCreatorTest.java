@@ -17,7 +17,7 @@ class CourseCreatorTest extends BaseApplicationServiceTest {
     final CourseCreator courseCreator;
 
     @Test
-    void create() {
+    void create_ValidRequest_Success() {
         Instructor instructor = prepareInstructor();
 
         Course course = courseCreator.create(CourseFixture.createCourseCreateRequest(instructor.getId(), null));
@@ -26,7 +26,7 @@ class CourseCreatorTest extends BaseApplicationServiceTest {
     }
 
     @Test
-    void update() {
+    void update_ValidRequest_Success() {
         Instructor instructor = prepareInstructor();
         Course course = courseCreator.create(CourseFixture.createCourseCreateRequest(instructor.getId(), null));
         CourseInfoUpdateRequest courseInfoUpdateRequest = CourseFixture.createCourseInfoUpdateRequest("New title");

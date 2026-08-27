@@ -17,7 +17,7 @@ class MemberAuthenticatorTest {
     final MemberRegister memberRegister;
 
     @Test
-    void login() {
+    void login_ValidCredentials_Success() {
         MemberRegisterRequest memberRegisterRequest = MemberFixture.createMemberRegisterRequest();
         Member member = memberRegister.register(memberRegisterRequest);
         member.activate();
@@ -28,7 +28,7 @@ class MemberAuthenticatorTest {
     }
 
     @Test
-    void loginFailWhenMemberNotActivated() {
+    void login_MemberNotActivated_ThrowsLoginFailedException() {
         MemberRegisterRequest memberRegisterRequest = MemberFixture.createMemberRegisterRequest();
         memberRegister.register(memberRegisterRequest);
 
@@ -38,7 +38,7 @@ class MemberAuthenticatorTest {
     }
 
     @Test
-    void loginFailWhenEmailNotExist() {
+    void login_EmailDoesNotExist_ThrowsLoginFailedException() {
         MemberRegisterRequest memberRegisterRequest = MemberFixture.createMemberRegisterRequest();
         memberRegister.register(memberRegisterRequest);
 
@@ -48,7 +48,7 @@ class MemberAuthenticatorTest {
     }
 
     @Test
-    void loginFailWhenInvalidPassword() {
+    void login_InvalidPassword_ThrowsLoginFailedException() {
         MemberRegisterRequest memberRegisterRequest = MemberFixture.createMemberRegisterRequest();
         memberRegister.register(memberRegisterRequest);
 

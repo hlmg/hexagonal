@@ -17,13 +17,17 @@ class InstructorFinderTest extends BaseApplicationServiceTest {
     final InstructorApplication instructorApplication;
 
     @Test
-    void find() {
+    void findByMember_ExistingMember_ReturnsInstructor() {
         Member member = prepareMember();
         Instructor instructor = instructorApplication.apply(new InstructorApplyRequest(member.getId()));
 
         Instructor found = instructorFinder.findByMember(member.getId()).orElseThrow();
 
         assertThat(found).isEqualTo(instructor);
+    }
+
+    @Test
+    void findByMember_NonExistingMember_ReturnsEmpty() {
         assertThat(instructorFinder.findByMember(Long.MAX_VALUE)).isEmpty();
     }
 

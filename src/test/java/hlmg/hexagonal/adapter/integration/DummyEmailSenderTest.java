@@ -11,7 +11,7 @@ class DummyEmailSenderTest {
 
     @StdIo
     @Test
-    void send(StdOut out) {
+    void send_ValidEmail_Success(StdOut out) {
         DummyEmailSender dummyEmailSender = new DummyEmailSender();
 
         dummyEmailSender.send(new Email("member@gmail.com"), "subject", "body");

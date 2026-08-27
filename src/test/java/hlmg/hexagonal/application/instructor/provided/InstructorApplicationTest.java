@@ -21,7 +21,7 @@ class InstructorApplicationTest extends BaseApplicationServiceTest {
     final InstructorRepository instructorRepository;
 
     @Test
-    void apply() {
+    void apply_ValidMember_Success() {
         Member member = prepareMember();
 
         Instructor instructor = instructorApplication.apply(InstructorFixture.createApplyRequest(member));
@@ -33,7 +33,7 @@ class InstructorApplicationTest extends BaseApplicationServiceTest {
     }
 
     @Test
-    void applyFailWhenAlreadyApplied() {
+    void apply_AlreadyAppliedMember_ThrowsDuplicateInstructorApplicationException() {
         Member member = prepareMember();
         instructorApplication.apply(InstructorFixture.createApplyRequest(member));
 
@@ -42,14 +42,14 @@ class InstructorApplicationTest extends BaseApplicationServiceTest {
     }
 
     @Test
-    void approve() {
+    void approve_PendingInstructor_Success() {
         Instructor approved = instructorApplication.approve(preparePendingInstructor().getId());
 
         assertThat(approved.getStatus()).isEqualTo(InstructorStatus.ACTIVE);
     }
 
     @Test
-    void reject() {
+    void reject_PendingInstructor_Success() {
         Instructor approved = instructorApplication.reject(preparePendingInstructor().getId());
 
         assertThat(approved.getStatus()).isEqualTo(InstructorStatus.REJECTED);

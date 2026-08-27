@@ -10,7 +10,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 class ProfileTest {
 
     @Test
-    void create() {
+    void constructor_ValidAddress_Success() {
         String address = "address";
 
         assertThat(new Profile(address).address()).isEqualTo(address);
@@ -24,13 +24,13 @@ class ProfileTest {
             "user 123",             // contains whitespace
             "프로필"                  // non-ASCII characters
     })
-    void profileFail(String address) {
+    void constructor_InvalidAddress_ThrowsException(String address) {
         assertThatThrownBy(() -> new Profile(address))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
-    void url() {
+    void url_ValidProfile_ReturnsFormattedUrl() {
         Profile profile = new Profile("address");
 
         assertThat(profile.url()).isEqualTo("@address");

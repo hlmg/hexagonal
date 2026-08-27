@@ -10,10 +10,16 @@ import static org.assertj.core.api.Assertions.assertThat;
 record SecurePasswordEncoderTest(SecurePasswordEncoder securePasswordEncoder) {
 
     @Test
-    void setSecurePasswordEncoder() {
+    void matches_CorrectPassword_ReturnsTrue() {
         String passwordHash = securePasswordEncoder.encode("password");
 
         assertThat(securePasswordEncoder.matches("password", passwordHash)).isTrue();
+    }
+
+    @Test
+    void matches_WrongPassword_ReturnsFalse() {
+        String passwordHash = securePasswordEncoder.encode("password");
+
         assertThat(securePasswordEncoder.matches("wrongPassword", passwordHash)).isFalse();
     }
 

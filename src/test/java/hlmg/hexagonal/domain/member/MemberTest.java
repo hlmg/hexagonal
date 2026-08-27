@@ -25,13 +25,13 @@ class MemberTest {
     }
 
     @Test
-    void registerMember() {
+    void register_ValidData_Success() {
         assertThat(member.getStatus()).isEqualTo(MemberStatus.PENDING);
         assertThat(member.getDetail().getRegisteredAt()).isNotNull();
     }
 
     @Test
-    void activate() {
+    void activate_PendingMember_Success() {
         member.activate();
 
         assertThat(member.getStatus()).isEqualTo(MemberStatus.ACTIVE);
@@ -39,7 +39,7 @@ class MemberTest {
     }
 
     @Test
-    void activateFailWhenNotPending() {
+    void activate_NotPending_ThrowsException() {
         member.activate();
 
         assertThatThrownBy(() -> member.activate())
@@ -47,7 +47,7 @@ class MemberTest {
     }
 
     @Test
-    void deactivate() {
+    void deactivate_ActiveMember_Success() {
         member.activate();
 
         member.deactivate();
@@ -57,13 +57,13 @@ class MemberTest {
     }
 
     @Test
-    void deactivateFailWhenPending() {
+    void deactivate_PendingMember_ThrowsException() {
         assertThatThrownBy(() -> member.deactivate())
                 .isInstanceOf(IllegalStateException.class);
     }
 
     @Test
-    void deactivateFailWhenAlreadyDeactivated() {
+    void deactivate_AlreadyDeactivated_ThrowsException() {
         member.activate();
         member.deactivate();
 
@@ -71,13 +71,17 @@ class MemberTest {
     }
 
     @Test
-    void verifyPassword() {
+    void verifyPassword_CorrectPassword_ReturnsTrue() {
         assertThat(member.verifyPassword(memberRegisterRequest.password(), passwordEncoder)).isTrue();
+    }
+
+    @Test
+    void verifyPassword_WrongPassword_ReturnsFalse() {
         assertThat(member.verifyPassword("wrongPassword", passwordEncoder)).isFalse();
     }
 
     @Test
-    void updateInfo() {
+    void updateInfo_ActiveMember_Success() {
         member.activate();
         MemberInfoUpdateRequest updateRequest = new MemberInfoUpdateRequest("newNickname", "newprofile", "newIntroduction");
 
@@ -89,7 +93,7 @@ class MemberTest {
     }
 
     @Test
-    void updateInfoFailWhenNotActivated() {
+    void updateInfo_NotActivated_ThrowsException() {
         MemberInfoUpdateRequest updateRequest = new MemberInfoUpdateRequest("newNickname", "newprofile", "newIntroduction");
 
         Assertions.assertThatThrownBy(() -> member.updateInfo(updateRequest.toInfo()))
@@ -97,20 +101,27 @@ class MemberTest {
     }
 
     @Test
-    void changePassword() {
+    void changePassword_ValidData_Success() {
         member.changePassword("newPassword", passwordEncoder);
 
         assertThat(member.verifyPassword("newPassword", passwordEncoder)).isTrue();
     }
 
     @Test
-    void isActive() {
+    void isActive_Pending_ReturnsFalse() {
         assertThat(member.isActive()).isFalse();
+    }
 
+    @Test
+    void isActive_Activated_ReturnsTrue() {
         member.activate();
 
         assertThat(member.isActive()).isTrue();
+    }
 
+    @Test
+    void isActive_Deactivated_ReturnsFalse() {
+        member.activate();
         member.deactivate();
 
         assertThat(member.isActive()).isFalse();

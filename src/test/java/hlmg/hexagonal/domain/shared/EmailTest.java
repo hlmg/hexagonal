@@ -15,7 +15,7 @@ class EmailTest {
             "user+tag@example.com",
             "user_name%test-1@sub.example.org"
     })
-    void create(String address) {
+    void constructor_ValidEmail_Success(String address) {
         assertThat(new Email(address).address()).isEqualTo(address);
     }
 
@@ -30,7 +30,7 @@ class EmailTest {
             "mem ber@gmail.com",    // whitespace
             "member@@gmail.com"     // duplicate @
     })
-    void createFail(String address) {
+    void constructor_InvalidEmail_ThrowsException(String address) {
         assertThatThrownBy(() -> new Email(address))
                 .isInstanceOf(IllegalArgumentException.class);
     }

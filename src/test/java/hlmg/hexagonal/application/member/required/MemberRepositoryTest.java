@@ -19,7 +19,7 @@ class MemberRepositoryTest {
     final MemberRepository memberRepository;
 
     @Test
-    void createMember() {
+    void save_ValidMember_Success() {
         Member member = Member.register(createMemberRegisterRequest().toInfo(), createPasswordEncoder());
 
         memberRepository.save(member);
@@ -30,7 +30,7 @@ class MemberRepositoryTest {
     }
 
     @Test
-    void createFailWhenEmailAlreadyExist() {
+    void save_DuplicateEmail_ThrowsDataIntegrityViolationException() {
         MemberRegisterInfo registerInfo = createMemberRegisterRequest().toInfo();
         Member member = Member.register(registerInfo, createPasswordEncoder());
         memberRepository.save(member);

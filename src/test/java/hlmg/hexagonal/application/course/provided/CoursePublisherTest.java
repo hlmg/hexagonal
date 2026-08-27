@@ -24,14 +24,14 @@ class CoursePublisherTest extends BaseApplicationServiceTest {
     }
 
     @Test
-    void submitForReview() {
+    void submitForReview_DraftCourse_Success() {
         Course submitted = coursePublisher.submitForReview(course.getId());
 
         assertThat(submitted.getStatus()).isEqualTo(CourseStatus.IN_REVIEW);
     }
 
     @Test
-    void publish() {
+    void publish_CourseInReview_Success() {
         coursePublisher.submitForReview(course.getId());
 
         Course published = coursePublisher.publish(course.getId());
@@ -40,7 +40,7 @@ class CoursePublisherTest extends BaseApplicationServiceTest {
     }
 
     @Test
-    void archive() {
+    void archive_PublishedCourse_Success() {
         coursePublisher.submitForReview(course.getId());
         coursePublisher.publish(course.getId());
 

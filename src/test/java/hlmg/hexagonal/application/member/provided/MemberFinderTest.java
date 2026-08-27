@@ -19,7 +19,7 @@ class MemberFinderTest {
     final EntityManager entityManager;
 
     @Test
-    void find() {
+    void find_ExistingMemberId_ReturnsMember() {
         Member member = memberRegister.register(MemberFixture.createMemberRegisterRequest());
         entityManager.flush();
         entityManager.clear();
@@ -30,7 +30,7 @@ class MemberFinderTest {
     }
 
     @Test
-    void findFailWhenNotFound() {
+    void find_NonExistingMemberId_ThrowsIllegalArgumentException() {
         assertThatThrownBy(() -> memberFinder.find(99L))
                 .isInstanceOf(IllegalArgumentException.class);
     }

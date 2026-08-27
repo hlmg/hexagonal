@@ -29,7 +29,7 @@ class MemberApiWebMvcTest {
     MemberRegister memberRegister;
 
     @Test
-    void register() {
+    void register_ValidRequest_Success() {
         Member member = MemberFixture.createMember(1L);
         MemberRegisterRequest request = MemberFixture.createMemberRegisterRequest();
 
@@ -50,7 +50,7 @@ class MemberApiWebMvcTest {
     }
 
     @Test
-    void registerFail() {
+    void register_InvalidEmail_ReturnsBadRequest() {
         MemberRegisterRequest request = MemberFixture.createMemberRegisterRequest("invalid email");
         String requestJson = objectMapper.writeValueAsString(request);
 

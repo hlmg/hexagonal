@@ -28,7 +28,7 @@ class MemberApiTest {
     final MemberRegister memberRegister;
 
     @Test
-    void register() {
+    void register_ValidRequest_Success() {
         MemberRegisterRequest request = createMemberRegisterRequest();
         String requestJson = objectMapper.writeValueAsString(request);
 
@@ -54,7 +54,7 @@ class MemberApiTest {
     }
 
     @Test
-    void duplicateEmail() {
+    void register_DuplicateEmail_ReturnsConflict() {
         MemberRegisterRequest request = createMemberRegisterRequest();
         memberRegister.register(request);
         String requestJson = objectMapper.writeValueAsString(request);

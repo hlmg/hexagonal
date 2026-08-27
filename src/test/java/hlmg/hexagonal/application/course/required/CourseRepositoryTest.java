@@ -35,7 +35,7 @@ class CourseRepositoryTest {
     }
 
     @Test
-    void save() {
+    void save_ValidCourse_Success() {
         Course course = createCourse(instructor);
 
         course = courseRepository.save(course);
@@ -44,7 +44,7 @@ class CourseRepositoryTest {
     }
 
     @Test
-    void saveFailWhenDuplicateTitleForSameInstructor() {
+    void save_DuplicateTitleForSameInstructor_Fails() {
         courseRepository.save(createCourse(instructor, "title"));
 
         assertThatThrownBy(() -> courseRepository.save(createCourse(instructor, "title")))
@@ -52,13 +52,19 @@ class CourseRepositoryTest {
     }
 
     @Test
-    void findByTitleContaining() {
+    void findByTitleContaining_MatchingTitle_ReturnsMatchedCourses() {
         Course course1 = courseRepository.save(createCourse(instructor, "Spring Basic"));
         Course course2 = courseRepository.save(createCourse(instructor, "Spring Intermediate"));
         Course course3 = courseRepository.save(createCourse(instructor, "Java Basic"));
 
         assertFindByTitle("Spring", course1, course2);
         assertFindByTitle("Basic", course1, course3);
+    }
+
+    @Test
+    void findByTitleContaining_NonMatchingTitle_ReturnsEmptyList() {
+        courseRepository.save(createCourse(instructor, "Spring Basic"));
+
         assertFindByTitle("No Course");
     }
 
@@ -68,7 +74,7 @@ class CourseRepositoryTest {
     }
 
     @Test
-    void findByInstructorId() {
+    void findByInstructorId_ExistingInstructor_ReturnsInstructorCourses() {
         Member member2 = memberRepository.save(MemberFixture.createActiveMember());
         Instructor instructor2 = instructorRepository.save(InstructorFixture.createActiveInstructor(member2));
         Course course1 = courseRepository.save(createCourse(instructor, "Spring Basic"));
@@ -77,6 +83,10 @@ class CourseRepositoryTest {
 
         assertFindByInstructorId(instructor.getId(), course1, course2);
         assertFindByInstructorId(instructor2.getId(), course3);
+    }
+
+    @Test
+    void findByInstructorId_NonExistingInstructor_ReturnsEmptyList() {
         assertFindByInstructorId(-1L);
     }
 

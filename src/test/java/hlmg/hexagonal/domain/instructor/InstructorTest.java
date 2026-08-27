@@ -10,7 +10,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 class InstructorTest {
 
     @Test
-    void apply() {
+    void apply_ActiveMember_Success() {
         Member member = MemberFixture.createActiveMember();
 
         Instructor instructor = Instructor.apply(member);
@@ -20,7 +20,7 @@ class InstructorTest {
     }
 
     @Test
-    void applyFailWhenMemberNotActive() {
+    void apply_MemberNotActive_ThrowsException() {
         Member pendingMember = MemberFixture.createMember();
 
         assertThatThrownBy(() -> Instructor.apply(pendingMember))
@@ -28,7 +28,7 @@ class InstructorTest {
     }
 
     @Test
-    void approve() {
+    void approve_PendingInstructor_Success() {
         Instructor instructor = InstructorFixture.createInstructor();
 
         instructor.approve();
@@ -37,7 +37,7 @@ class InstructorTest {
     }
 
     @Test
-    void approveFail() {
+    void approve_NotPendingInstructor_ThrowsException() {
         Instructor instructor = InstructorFixture.createInstructor();
         instructor.approve();
 
@@ -46,7 +46,7 @@ class InstructorTest {
     }
 
     @Test
-    void reject() {
+    void reject_PendingInstructor_Success() {
         Instructor instructor = InstructorFixture.createInstructor();
 
         instructor.reject();
@@ -55,7 +55,7 @@ class InstructorTest {
     }
 
     @Test
-    void rejectFail() {
+    void reject_NotPendingInstructor_ThrowsException() {
         Instructor instructor = InstructorFixture.createInstructor();
         instructor.reject();
 
@@ -64,22 +64,31 @@ class InstructorTest {
     }
 
     @Test
-    void isActive() {
+    void isActive_NotApproved_ReturnsFalse() {
         Instructor instructor = InstructorFixture.createInstructor();
 
         assertThat(instructor.isActive()).isFalse();
+    }
 
+    @Test
+    void isActive_Approved_ReturnsTrue() {
+        Instructor instructor = InstructorFixture.createInstructor();
         instructor.approve();
+
         assertThat(instructor.isActive()).isTrue();
     }
 
     @Test
-    void ensureActive() {
+    void ensureActive_NotApproved_ThrowsException() {
         Instructor instructor = InstructorFixture.createInstructor();
 
         assertThatThrownBy(instructor::ensureActive)
                 .isInstanceOf(IllegalStateException.class);
+    }
 
+    @Test
+    void ensureActive_Approved_DoesNotThrow() {
+        Instructor instructor = InstructorFixture.createInstructor();
         instructor.approve();
 
         instructor.ensureActive();

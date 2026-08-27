@@ -20,7 +20,7 @@ class CourseValidatorTest extends BaseApplicationServiceTest {
     final CourseRepository courseRepository;
 
     @Test
-    void validateForCreate() {
+    void validateForCreate_uniqueTitle_success() {
         Instructor instructor = prepareInstructor();
         courseRepository.save(CourseFixture.createCourse(instructor, "Spring Basic"));
         CourseCreateRequest request = new CourseCreateRequest(instructor.getId(), "New Course", null);
@@ -30,7 +30,7 @@ class CourseValidatorTest extends BaseApplicationServiceTest {
     }
 
     @Test
-    void validateForCreateFailWhenTitleDuplicatedForSameInstructor() {
+    void validateForCreate_duplicateTitle_throwsException() {
         Instructor instructor = prepareInstructor();
         Course course = courseRepository.save(CourseFixture.createCourse(instructor, "Spring Basic"));
         CourseCreateRequest request = new CourseCreateRequest(instructor.getId(), course.getTitle(), null);
@@ -41,7 +41,7 @@ class CourseValidatorTest extends BaseApplicationServiceTest {
     }
 
     @Test
-    void validateForCreateWhenSameTitleUsedByDifferentInstructor() {
+    void validateForCreate_differentInstructorWithSameTitle_success() {
         Instructor instructor1 = prepareInstructor();
         Instructor instructor2 = prepareInstructor();
         Course course = courseRepository.save(CourseFixture.createCourse(instructor1, "Spring Basic"));
@@ -52,7 +52,7 @@ class CourseValidatorTest extends BaseApplicationServiceTest {
     }
 
     @Test
-    void validateForUpdateWithSameTitle() {
+    void validateForUpdate_unchangedTitle_success() {
         Instructor instructor = prepareInstructor();
         Course course = courseRepository.save(CourseFixture.createCourse(instructor, "Spring Basic"));
         CourseInfoUpdateRequest updateRequest = CourseFixture.createCourseInfoUpdateRequest(course.getTitle());
@@ -62,7 +62,7 @@ class CourseValidatorTest extends BaseApplicationServiceTest {
     }
 
     @Test
-    void validateForUpdateFailWhenTitleDuplicatedForSameInstructor() {
+    void validateForUpdate_duplicateTitle_throwsException() {
         Instructor instructor = prepareInstructor();
         Course course1 = courseRepository.save(CourseFixture.createCourse(instructor, "Spring Basic"));
         Course course2 = courseRepository.save(CourseFixture.createCourse(instructor, "Spring Intermediate"));

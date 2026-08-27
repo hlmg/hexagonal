@@ -20,7 +20,7 @@ class MemberRegisterTest {
     final EntityManager entityManager;
 
     @Test
-    void register() {
+    void register_ValidRequest_Success() {
         Member member = memberRegister.register(MemberFixture.createMemberRegisterRequest());
 
         assertThat(member.getId()).isNotNull();
@@ -28,7 +28,7 @@ class MemberRegisterTest {
     }
 
     @Test
-    void registerFailWhenEmailAlreadyExist() {
+    void register_EmailAlreadyExists_ThrowsDuplicateEmailException() {
         MemberRegisterRequest memberRegisterRequest = MemberFixture.createMemberRegisterRequest();
         memberRegister.register(memberRegisterRequest);
 
@@ -49,7 +49,7 @@ class MemberRegisterTest {
             "member@gmail.com, nickname, short",
             "member@gmail.com, nickname, 123456789012345678901"
     })
-    void memberRegisterRequestFail(String email, String nickname, String password) {
+    void register_InvalidRequest_ThrowsConstraintViolationException(String email, String nickname, String password) {
         MemberRegisterRequest request = new MemberRegisterRequest(email, nickname, password);
 
         assertThatThrownBy(() -> memberRegister.register(request))
@@ -57,7 +57,7 @@ class MemberRegisterTest {
     }
 
     @Test
-    void activate() {
+    void activate_PendingMember_Success() {
         Member member = registerMember();
 
         member = memberRegister.activate(member.getId());
@@ -67,7 +67,7 @@ class MemberRegisterTest {
     }
 
     @Test
-    void deactivate() {
+    void deactivate_ActiveMember_Success() {
         Member member = registerMember();
         memberRegister.activate(member.getId());
         entityManager.flush();
@@ -80,7 +80,7 @@ class MemberRegisterTest {
     }
 
     @Test
-    void updateInfo() {
+    void updateInfo_ValidRequest_Success() {
         Member member = registerMember();
         memberRegister.activate(member.getId());
         entityManager.flush();
@@ -95,7 +95,7 @@ class MemberRegisterTest {
     }
 
     @Test
-    void updateInfoFailWhenProfileAddressDuplicated() {
+    void updateInfo_DuplicatedProfileAddress_ThrowsDuplicateProfileException() {
         Member member = registerMember();
         memberRegister.activate(member.getId());
         memberRegister.updateInfo(member.getId(), new MemberInfoUpdateRequest("nickname", "duplicate", "introduction"));

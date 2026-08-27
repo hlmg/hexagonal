@@ -13,7 +13,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 class CourseTest {
 
     @Test
-    void create() {
+    void create_ValidData_Success() {
         Instructor instructor = InstructorFixture.createActiveInstructor();
 
         Course course = new Course(instructor, "title", "description");
@@ -26,7 +26,7 @@ class CourseTest {
     }
 
     @Test
-    void createFailWhenInstructorNotActive() {
+    void create_InstructorNotActive_ThrowsException() {
         Instructor instructor = InstructorFixture.createInstructor();
 
         assertThatThrownBy(() -> new Course(instructor, "title", "description"))
@@ -34,7 +34,7 @@ class CourseTest {
     }
 
     @Test
-    void submitForReview() {
+    void submitForReview_DraftCourse_Success() {
         Course course = CourseFixture.createCourse();
         course.submitForReview();
 
@@ -42,7 +42,7 @@ class CourseTest {
     }
 
     @Test
-    void submitForReviewFailWhenNoDescription() {
+    void submitForReview_NoDescription_ThrowsException() {
         Instructor instructor = InstructorFixture.createActiveInstructor();
         Course course = new Course(instructor, "title", null);
 
@@ -52,7 +52,7 @@ class CourseTest {
 
     @ParameterizedTest
     @EnumSource(value = CourseStatus.class, mode = EnumSource.Mode.EXCLUDE, names = "DRAFT")
-    void submitForReviewFailWhenNotDraft(CourseStatus invalidStatus) {
+    void submitForReview_NotDraft_ThrowsException(CourseStatus invalidStatus) {
         Course course = CourseFixture.createCourse(invalidStatus);
 
         assertThatThrownBy(course::submitForReview)
@@ -60,7 +60,7 @@ class CourseTest {
     }
 
     @Test
-    void publish() {
+    void publish_InReviewCourse_Success() {
         Course course = CourseFixture.createCourse();
         course.submitForReview();
 
@@ -72,7 +72,7 @@ class CourseTest {
 
     @ParameterizedTest
     @EnumSource(value = CourseStatus.class, mode = EnumSource.Mode.EXCLUDE, names = "IN_REVIEW")
-    void publishFailWhenNotInReview(CourseStatus invalidStatus) {
+    void publish_NotInReview_ThrowsException(CourseStatus invalidStatus) {
         Course course = CourseFixture.createCourse(invalidStatus);
 
         assertThatThrownBy(course::publish)
@@ -80,7 +80,7 @@ class CourseTest {
     }
 
     @Test
-    void archive() {
+    void archive_PublishedCourse_Success() {
         Course course = CourseFixture.createCourse();
         course.submitForReview();
         course.publish();
@@ -93,7 +93,7 @@ class CourseTest {
 
     @ParameterizedTest
     @EnumSource(value = CourseStatus.class, mode = EnumSource.Mode.EXCLUDE, names = "PUBLISHED")
-    void archiveFailWhenNotPublished(CourseStatus invalidStatus) {
+    void archive_NotPublished_ThrowsException(CourseStatus invalidStatus) {
         Course course = CourseFixture.createCourse(invalidStatus);
 
         assertThatThrownBy(course::archive)
@@ -101,7 +101,7 @@ class CourseTest {
     }
 
     @Test
-    void updateInfo() {
+    void updateInfo_ValidData_Success() {
         Course course = CourseFixture.createCourse();
         course.updateInfo(new CourseUpdateInfo("new lecture", "new description"));
 
