@@ -11,7 +11,7 @@ import static org.instancio.Select.field;
 public class EnrollmentFixture {
 
     public static Enrollment createEnrollment() {
-        return Enrollment.enroll(MemberFixture.createActiveMember(), CourseFixture.createActiveCourse());
+        return Enrollment.enroll(MemberFixture.createActiveMember(), CourseFixture.createPublishedCourse());
     }
 
     public static Enrollment createEnrollment(EnrollmentStatus status) {
@@ -19,7 +19,7 @@ public class EnrollmentFixture {
                 .ignore(field(Enrollment::getId))
                 .set(field(Enrollment::getEnrollmentStatus), status)
                 .supply(field(Enrollment::getMember), MemberFixture::createActiveMember)
-                .supply(field(Enrollment::getCourse), CourseFixture::createActiveCourse)
+                .supply(field(Enrollment::getCourse), CourseFixture::createPublishedCourse)
                 .supply(field(Enrollment::getEnrolledAt), () -> LocalDateTime.now())
                 .create();
     }

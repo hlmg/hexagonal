@@ -47,7 +47,14 @@ public class CourseFixture {
                 .create();
     }
 
-    public static Course createActiveCourse() {
+    public static Course createCourse(Instructor instructor, CourseStatus status) {
+        return Instancio.of(courseModel())
+                .set(field(Course::getInstructor), instructor)
+                .set(field(Course::getStatus), status)
+                .create();
+    }
+
+    public static Course createPublishedCourse() {
         return createCourse(CourseStatus.PUBLISHED);
     }
 

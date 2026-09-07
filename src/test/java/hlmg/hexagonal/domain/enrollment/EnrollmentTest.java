@@ -22,7 +22,7 @@ class EnrollmentTest {
     @BeforeEach
     void setUp() {
         activatedMember = MemberFixture.createActiveMember();
-        publishedCourse = CourseFixture.createActiveCourse();
+        publishedCourse = CourseFixture.createPublishedCourse();
     }
 
     @Test

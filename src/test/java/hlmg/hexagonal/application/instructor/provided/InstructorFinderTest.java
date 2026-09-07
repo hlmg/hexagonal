@@ -18,7 +18,7 @@ class InstructorFinderTest extends BaseApplicationServiceTest {
 
     @Test
     void findByMember_ExistingMember_ReturnsInstructor() {
-        Member member = prepareMember();
+        Member member = prepareActiveMember();
         Instructor instructor = instructorApplication.apply(new InstructorApplyRequest(member.getId()));
 
         Instructor found = instructorFinder.findByMember(member.getId()).orElseThrow();

@@ -22,7 +22,7 @@ class InstructorApplicationTest extends BaseApplicationServiceTest {
 
     @Test
     void apply_ValidMember_Success() {
-        Member member = prepareMember();
+        Member member = prepareActiveMember();
 
         Instructor instructor = instructorApplication.apply(InstructorFixture.createApplyRequest(member));
 
@@ -34,7 +34,7 @@ class InstructorApplicationTest extends BaseApplicationServiceTest {
 
     @Test
     void apply_AlreadyAppliedMember_ThrowsDuplicateInstructorApplicationException() {
-        Member member = prepareMember();
+        Member member = prepareActiveMember();
         instructorApplication.apply(InstructorFixture.createApplyRequest(member));
 
         assertThatThrownBy(() -> instructorApplication.apply(InstructorFixture.createApplyRequest(member)))
@@ -56,7 +56,7 @@ class InstructorApplicationTest extends BaseApplicationServiceTest {
     }
 
     private Instructor preparePendingInstructor() {
-        Member member = prepareMember();
+        Member member = prepareActiveMember();
 
         return instructorApplication.apply(InstructorFixture.createApplyRequest(member));
     }

@@ -1,12 +1,8 @@
 package hlmg.hexagonal.application.course.required;
 
-import hlmg.hexagonal.application.instructor.required.InstructorRepository;
-import hlmg.hexagonal.application.member.required.MemberRepository;
 import hlmg.hexagonal.domain.course.Course;
 import hlmg.hexagonal.domain.instructor.Instructor;
-import hlmg.hexagonal.domain.instructor.InstructorFixture;
-import hlmg.hexagonal.domain.member.Member;
-import hlmg.hexagonal.domain.member.MemberFixture;
+import hlmg.hexagonal.support.test.BaseRepositoryTest;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,19 +15,14 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @DataJpaTest
 @RequiredArgsConstructor
-class CourseRepositoryTest {
+class CourseRepositoryTest extends BaseRepositoryTest {
 
     final CourseRepository courseRepository;
-    final MemberRepository memberRepository;
-    final InstructorRepository instructorRepository;
-
-    Member member;
-    Instructor instructor;
 
     @BeforeEach
     void setUp() {
-        member = memberRepository.save(MemberFixture.createActiveMember());
-        instructor = instructorRepository.save(InstructorFixture.createActiveInstructor(member));
+        member = prepareActiveMember();
+        instructor = prepareActiveInstructor(member);
     }
 
     @Test
@@ -45,7 +36,7 @@ class CourseRepositoryTest {
 
     @Test
     void save_DuplicateTitleForSameInstructor_Fails() {
-        courseRepository.save(createCourse(instructor, "title"));
+        prepareCourse(instructor, "title");
 
         assertThatThrownBy(() -> courseRepository.save(createCourse(instructor, "title")))
                 .isInstanceOf(DataIntegrityViolationException.class);
@@ -53,9 +44,9 @@ class CourseRepositoryTest {
 
     @Test
     void findByTitleContaining_MatchingTitle_ReturnsMatchedCourses() {
-        Course course1 = courseRepository.save(createCourse(instructor, "Spring Basic"));
-        Course course2 = courseRepository.save(createCourse(instructor, "Spring Intermediate"));
-        Course course3 = courseRepository.save(createCourse(instructor, "Java Basic"));
+        Course course1 = prepareCourse(instructor, "Spring Basic");
+        Course course2 = prepareCourse(instructor, "Spring Intermediate");
+        Course course3 = prepareCourse(instructor, "Java Basic");
 
         assertFindByTitle("Spring", course1, course2);
         assertFindByTitle("Basic", course1, course3);
@@ -63,7 +54,7 @@ class CourseRepositoryTest {
 
     @Test
     void findByTitleContaining_NonMatchingTitle_ReturnsEmptyList() {
-        courseRepository.save(createCourse(instructor, "Spring Basic"));
+        prepareCourse(instructor, "Spring Basic");
 
         assertFindByTitle("No Course");
     }
@@ -75,13 +66,13 @@ class CourseRepositoryTest {
 
     @Test
     void findByInstructorId_ExistingInstructor_ReturnsInstructorCourses() {
-        Member member2 = memberRepository.save(MemberFixture.createActiveMember());
-        Instructor instructor2 = instructorRepository.save(InstructorFixture.createActiveInstructor(member2));
-        Course course1 = courseRepository.save(createCourse(instructor, "Spring Basic"));
-        Course course2 = courseRepository.save(createCourse(instructor, "Spring Advanced"));
-        Course course3 = courseRepository.save(createCourse(instructor2, "Java Basic"));
+        Instructor instructor1 = prepareActiveInstructor();
+        Instructor instructor2 = prepareActiveInstructor();
+        Course course1 = prepareCourse(instructor1, "Spring Basic");
+        Course course2 = prepareCourse(instructor1, "Spring Advanced");
+        Course course3 = prepareCourse(instructor2, "Java Basic");
 
-        assertFindByInstructorId(instructor.getId(), course1, course2);
+        assertFindByInstructorId(instructor1.getId(), course1, course2);
         assertFindByInstructorId(instructor2.getId(), course3);
     }
 
